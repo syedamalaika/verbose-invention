@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Login - SkillProof{% endblock %}
+
+{% block content %}
+<div class="max-w-md mx-auto mt-20 px-6">
+    <div class="glass p-8 rounded-2xl shadow-2xl">
+        <h2 class="text-3xl font-bold mb-2">Welcome Back</h2>
+        <p class="text-slate-400 mb-8">Enter your credentials to access your dashboard.</p>
+        
+        <form method="post" class="space-y-6">
+            {% csrf_token %}
+            <div>
+                <label class="block text-sm text-slate-400 mb-2">Username</label>
+                <input type="text" name="username" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-indigo-500 focus:outline-none transition">
+            </div>
+            <div>
+                <label class="block text-sm text-slate-400 mb-2">Password</label>
+                <input type="password" name="password" required class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:border-indigo-500 focus:outline-none transition">
+            </div>
+            
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 py-4 rounded-xl font-bold transition">Sign In</button>
+        </form>
+        
+        <p class="mt-8 text-center text-slate-500">
+            Don't have an account? <a href="{% url 'signup' %}" class="text-indigo-400 hover:underline">Sign up</a>
+        </p>
+        
+        <div class="mt-6 p-4 bg-indigo-500/10 border border-indigo-500/20 rounded-xl">
+            <p class="text-xs text-indigo-300 font-bold uppercase mb-2">Demo Credentials</p>
+            <p class="text-sm text-slate-400">User: <span class="text-white">admin</span> | Pass: <span class="text-white">admin123</span></p>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block title %}Taking Test: {{ skill.name }} - SkillProof{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-12">
+    <div class="flex justify-between items-center mb-12">
+        <div>
+            <h2 class="text-3xl font-bold mb-2">{{ skill.name }} Validation</h2>
+            <p class="text-slate-400">Read each question carefully. There is no time limit for this phase.</p>
+        </div>
+        <div class="glass px-6 py-3 rounded-xl border border-indigo-500/30 flex items-center gap-4">
+            <i class="fas fa-clock text-indigo-400"></i>
+            <span id="timer" class="font-mono text-xl">00:00</span>
+        </div>
+    </div>
+
+    <form method="post" action="{% url 'submit_test' skill.id %}" id="test-form">
+        {% csrf_token %}
+        <div class="space-y-8">
+            {% for test in tests %}
+                <div class="glass p-8 rounded-2xl border border-white/10">
+                    <div class="flex gap-6">
+                        <span class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center font-bold text-slate-400 shrink-0">{{ forloop.counter }}</span>
+                        <div class="flex-grow">
+                            <h3 class="text-xl font-semibold mb-8">{{ test.question }}</h3>
+                            
+                            <div class="grid md:grid-cols-2 gap-4">
+                                <label class="block relative group cursor-pointer">
+                                    <input type="radio" name="q_{{ test.id }}" value="A" required class="peer hidden">
+                                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl peer-checked:bg-indigo-600/20 peer-checked:border-indigo-500 transition group-hover:border-white/20">
+                                        <span class="font-bold mr-3 text-slate-500">A.</span> {{ test.option_a }}
+                                    </div>
+                                </label>
+                                <label class="block relative group cursor-pointer">
+                                    <input type="radio" name="q_{{ test.id }}" value="B" class="peer hidden">
+                                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl peer-checked:bg-indigo-600/20 peer-checked:border-indigo-500 transition group-hover:border-white/20">
+                                        <span class="font-bold mr-3 text-slate-500">B.</span> {{ test.option_b }}
+                                    </div>
+                                </label>
+                                <label class="block relative group cursor-pointer">
+                                    <input type="radio" name="q_{{ test.id }}" value="C" class="peer hidden">
+                                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl peer-checked:bg-indigo-600/20 peer-checked:border-indigo-500 transition group-hover:border-white/20">
+                                        <span class="font-bold mr-3 text-slate-500">C.</span> {{ test.option_c }}
+                                    </div>
+                                </label>
+                                <label class="block relative group cursor-pointer">
+                                    <input type="radio" name="q_{{ test.id }}" value="D" class="peer hidden">
+                                    <div class="bg-white/5 border border-white/10 p-4 rounded-xl peer-checked:bg-indigo-600/20 peer-checked:border-indigo-500 transition group-hover:border-white/20">
+                                        <span class="font-bold mr-3 text-slate-500">D.</span> {{ test.option_d }}
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="mt-12 flex justify-center">
+            <button type="submit" class="bg-indigo-600 px-12 py-4 rounded-xl font-bold text-xl hover:bg-indigo-700 transition shadow-2xl shadow-indigo-600/30">
+                Finish & Submit
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    let seconds = 0;
+    const timerElement = document.getElementById('timer');
+    setInterval(() => {
+        seconds++;
+        const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+        const secs = (seconds % 60).toString().padStart(2, '0');
+        timerElement.innerText = `${mins}:${secs}`;
+    }, 1000);
+</script>
+{% endblock %}

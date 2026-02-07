@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Test Result: {{ skill.name }} - SkillProof{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-6 py-20 text-center">
+    {% if result.score >= 70 %}
+        <div class="mb-12">
+            <div class="w-32 h-32 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-8 border-4 border-green-500/50">
+                <i class="fas fa-check text-6xl text-green-500"></i>
+            </div>
+            <h2 class="text-5xl font-extrabold mb-4">Congratulations!</h2>
+            <p class="text-xl text-slate-400">You have successfully validated your skill in <span class="text-white font-bold">{{ skill.name }}</span>.</p>
+        </div>
+
+        <div class="glass p-12 rounded-3xl border border-white/20 mb-12 relative overflow-hidden">
+            <div class="absolute top-0 right-0 p-8 transform rotate-12 opacity-5">
+                <i class="fas fa-certificate text-[12rem]"></i>
+            </div>
+            
+            <p class="text-indigo-400 font-bold uppercase tracking-[0.3em] mb-4 text-sm">Certificate of Achievement</p>
+            <h3 class="text-4xl font-bold mb-8">Score: {{ result.score }}%</h3>
+            
+            <div class="flex flex-col md:flex-row justify-center items-center gap-12 text-left bg-white/5 p-8 rounded-2xl">
+                <div>
+                    <label class="text-xs text-slate-500 uppercase block mb-1">Issue Date</label>
+                    <p class="font-mono">{{ result.date_taken|date:"M d, Y" }}</p>
+                </div>
+                <div class="h-12 w-px bg-white/10 hidden md:block"></div>
+                <div>
+                    <label class="text-xs text-slate-500 uppercase block mb-1">Verification Code</label>
+                    <p class="font-mono text-indigo-300">{{ certificate.code }}</p>
+                </div>
+                <div class="h-12 w-px bg-white/10 hidden md:block"></div>
+                <div>
+                    <label class="text-xs text-slate-500 uppercase block mb-1">Status</label>
+                    <p class="text-green-400 font-bold flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span> Verified
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex justify-center gap-4">
+            <a href="{% url 'dashboard' %}" class="bg-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-indigo-700 transition">Go to Dashboard</a>
+            <button class="glass px-8 py-4 rounded-xl font-bold hover:bg-white/5 transition flex items-center gap-3">
+                <i class="fas fa-download"></i> Download Certificate
+            </button>
+        </div>
+    {% else %}
+        <div class="mb-12">
+            <div class="w-32 h-32 rounded-full bg-red-500/20 flex items-center justify-center mx-auto mb-8 border-4 border-red-500/50">
+                <i class="fas fa-times text-6xl text-red-500"></i>
+            </div>
+            <h2 class="text-5xl font-extrabold mb-4">Keep Learning!</h2>
+            <p class="text-xl text-slate-400">You scored <span class="text-white font-bold">{{ result.score }}%</span>. A minimum of 70% is required for certification.</p>
+        </div>
+        
+        <div class="flex justify-center gap-4">
+            <a href="{% url 'take_test' skill.id %}" class="bg-indigo-600 px-8 py-4 rounded-xl font-bold hover:bg-indigo-700 transition">Try Again</a>
+            <a href="{% url 'skill_select' %}" class="glass px-8 py-4 rounded-xl font-bold hover:bg-white/5 transition">Back to Skills</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

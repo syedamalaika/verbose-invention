@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}SkillProof{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+        }
+        .glass {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #6366f1, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col">
+    <!-- Navigation -->
+    <nav class="glass sticky top-0 z-50 border-b border-white/10 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="/" class="text-2xl font-bold gradient-text">SkillProof</a>
+            <div class="flex items-center gap-6">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'dashboard' %}" class="hover:text-indigo-400 transition">Dashboard</a>
+                    <a href="{% url 'skill_select' %}" class="hover:text-indigo-400 transition">Skills</a>
+                    <div class="flex items-center gap-3 pl-4 border-l border-white/10">
+                        <span class="text-sm text-slate-400">{{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="bg-red-500/10 text-red-400 px-4 py-2 rounded-lg text-sm border border-red-500/20 hover:bg-red-500 hover:text-white transition">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="{% url 'login' %}" class="hover:text-indigo-400 transition">Login</a>
+                    <a href="{% url 'signup' %}" class="bg-indigo-600 px-6 py-2 rounded-lg hover:bg-indigo-700 transition">Get Started</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    {% if messages %}
+    <div class="max-w-7xl mx-auto px-6 mt-4">
+        {% for message in messages %}
+        <div class="p-4 rounded-xl {% if message.tags == 'error' %}bg-red-500/20 text-red-400 border border-red-500/30{% else %}bg-green-500/20 text-green-400 border border-green-500/30{% endif %}">
+            {{ message }}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass border-t border-white/10 py-8 px-6 mt-12">
+        <div class="max-w-7xl mx-auto text-center text-slate-500">
+            <p>&copy; 2026 SkillProof Validation System. All rights reserved.</p>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
